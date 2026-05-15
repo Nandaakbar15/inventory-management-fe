@@ -10,6 +10,10 @@ import FormTambahCategories from "./pages/Admin/DataCategories/TambahCategories"
 import FormEditProdukPage from "./pages/Admin/DataProduct/EditDataProduct";
 import FormTambahSupplier from "./pages/Admin/DataSuppliers/TambahSuppliers";
 import FormEditDataSupplier from "./pages/Admin/DataSuppliers/EditDataSupplier";
+import DataStockAdminPages from "./pages/Admin/DataStock/IndexDataStock";
+import FormTambahDataStockAdminPages from "./pages/Admin/DataStock/TambahDataStock";
+import FormEditDataStockAdminPages from "./pages/Admin/DataStock/EditDataStock";
+import FormEditCategories from "./pages/Admin/DataCategories/EditCategories";
 
 function App() {
   return (
@@ -46,6 +50,10 @@ function App() {
           element={<FormTambahCategories />}
         ></Route>
         <Route
+          path="/admin/edit_categories/:id"
+          element={<FormEditCategories />}
+        ></Route>
+        <Route
           path="/admin/data_suppliers"
           element={<DataSupplierAdminPages />}
         ></Route>
@@ -56,6 +64,18 @@ function App() {
         <Route
           path="/admin/edit_data_suppliers/:id"
           element={<FormEditDataSupplier />}
+        ></Route>
+        <Route
+          path="/admin/data_stock"
+          element={<DataStockAdminPages />}
+        ></Route>
+        <Route
+          path="/admin/tambah_data_stock"
+          element={<FormTambahDataStockAdminPages />}
+        ></Route>
+        <Route
+          path="/admin/edit_data_stock/:id"
+          element={<FormEditDataStockAdminPages />}
         ></Route>
       </Routes>
     </BrowserRouter>

@@ -29,7 +29,7 @@ export default function DataSupplierAdminPages() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/getAllSuppliers",
+        "http://127.0.0.1:8000/api/admin/suppliers/getAllSuppliers",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ export default function DataSupplierAdminPages() {
   const deleteSupplier = async (id: number) => {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/admin/deleteSupplier/${id}`,
+        `http://127.0.0.1:8000/api/admin/suppliers/deleteSupplier/${id}`,
       );
 
       setMessage(response.data.message);

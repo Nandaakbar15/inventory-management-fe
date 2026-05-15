@@ -36,7 +36,7 @@ export default function FormTambahProdukPage() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://127.0.0.1:8000/api/admin/getAllCategories",
+          "http://127.0.0.1:8000/api/admin/categories/getAllCategories",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ export default function FormTambahProdukPage() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/admin/createProduct",
+        "http://127.0.0.1:8000/api/admin/products/createProduct",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

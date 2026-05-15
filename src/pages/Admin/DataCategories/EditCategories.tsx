@@ -1,33 +1,53 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import axios from "axios";
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-export default function FormTambahCategories() {
+export default function FormEditCategories() {
+  const { id } = useParams();
   const [namesCategories, setNameCategories] = useState("");
   const [slugCategories, setSlugCategories] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const addCategories = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const getCategoriesById = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/admin/categories/getCategoriesById/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const { name, slug } = response.data.data;
+
+        setNameCategories(name);
+        setSlugCategories(slug);
+      } catch (error) {
+        console.error("Error : ", error);
+      }
+    };
+
+    getCategoriesById();
+  }, [id]);
+
+  const updateCategories = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/admin/categories/createCategories",
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/admin/categories/updateCategories/${id}`,
         {
           name: namesCategories,
           slug: slugCategories,
@@ -60,17 +80,12 @@ export default function FormTambahCategories() {
           <Modal show={showModal} onClose={() => setShowModal(false)}>
             <p className="text-center text-gray-700">{message}</p>
           </Modal>
-          <h1 className="font-medium text-3xl">Form halaman tambah kategori</h1>
+          <h1 className="font-medium text-3xl">Form halaman edit kategori</h1>
           <div className="mx-auto mt-10 max-w">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl font-semibold">
-                  Isi data form kategori
-                </CardTitle>
-              </CardHeader>
               <CardContent>
                 <form
-                  onSubmit={addCategories}
+                  onSubmit={updateCategories}
                   method="POST"
                   className="space-y-4 animate-slide-down"
                 >
@@ -85,6 +100,7 @@ export default function FormTambahCategories() {
                       type="text"
                       id="name"
                       name="name"
+                      value={namesCategories}
                       onChange={(e) => setNameCategories(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
@@ -99,6 +115,7 @@ export default function FormTambahCategories() {
                     <input
                       type="text"
                       id="slug"
+                      value={slugCategories}
                       name="slug"
                       onChange={(e) => setSlugCategories(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -108,7 +125,7 @@ export default function FormTambahCategories() {
                     type="submit"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
                   >
-                    Tambah!
+                    Ubah!
                   </button>
                 </form>
               </CardContent>

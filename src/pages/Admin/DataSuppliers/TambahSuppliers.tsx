@@ -30,7 +30,7 @@ export default function FormTambahSupplier() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/admin/createSupplier",
+        "http://127.0.0.1:8000/api/admin/suppliers/createSupplier",
         {
           name: nameSupplier,
           contact_person: contactPerson,

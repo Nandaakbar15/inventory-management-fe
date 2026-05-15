@@ -31,7 +31,7 @@ export default function IndexDataProductAdminPages() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/getAllProducts",
+        "http://127.0.0.1:8000/api/admin/products/getAllProducts",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ export default function IndexDataProductAdminPages() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/admin/deleteProduct/${id}`,
+        `http://127.0.0.1:8000/api/admin/products/deleteProduct/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

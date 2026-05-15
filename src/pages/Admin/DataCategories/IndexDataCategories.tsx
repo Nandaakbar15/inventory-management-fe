@@ -30,7 +30,7 @@ export default function DataCategoriesAdminPages() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/getAllCategories",
+        "http://127.0.0.1:8000/api/admin/categories/getAllCategories",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ export default function DataCategoriesAdminPages() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/admin/deleteCategories/${id}`,
+        `http://127.0.0.1:8000/api/admin/categories/deleteCategories/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,6 +90,9 @@ export default function DataCategoriesAdminPages() {
             </Link>
           </h2>
           <div className="overflow-x-auto">
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+              <p className="text-center text-gray-700">{message}</p>
+            </Modal>
             <Card>
               <CardContent>
                 <Table>

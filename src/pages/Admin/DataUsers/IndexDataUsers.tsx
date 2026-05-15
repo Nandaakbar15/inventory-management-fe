@@ -27,7 +27,7 @@ export default function IndexDataUsersPages() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/getAllUsers",
+        "http://127.0.0.1:8000/api/admin/users/getAllUsers",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ export default function IndexDataUsersPages() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/admin/deleteUser/${id}`,
+        `http://127.0.0.1:8000/api/admin/users/deleteUser/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

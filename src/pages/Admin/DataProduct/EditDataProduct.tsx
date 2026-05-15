@@ -30,7 +30,7 @@ export default function FormEditProdukPage() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://127.0.0.1:8000/api/admin/getAllCategories",
+          "http://127.0.0.1:8000/api/admin/categories/getAllCategories",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export default function FormEditProdukPage() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          `http://127.0.0.1:8000/api/admin/getProductsById/${id}`,
+          `http://127.0.0.1:8000/api/admin/products/getProductsById/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ export default function FormEditProdukPage() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `http://127.0.0.1:8000/api/admin/updateproduct/${id}`,
+        `http://127.0.0.1:8000/api/admin/products/updateproduct/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
