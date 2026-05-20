@@ -25,7 +25,7 @@ export default function SideBarAdmin() {
         {/* Navigation */}
         <nav className="mt-5 px-2 space-y-1 text-sm font-medium">
           <div className="ml-10 mt-1 space-y-1">
-            <Link to="/admin" className={linkClass("/admin")}>
+            <Link to="/admin/dashboard" className={linkClass("/admin")}>
               Dashboard
             </Link>
             <Link
