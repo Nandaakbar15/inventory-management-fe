@@ -3,6 +3,7 @@ import type { Categories } from "./Categories";
 export type Product = {
   id: number;
   category_id: number;
+  image: string;
   sku: string;
   name: string;
   description: string | null; // Gunakan null jika di DB boleh kosong

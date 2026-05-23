@@ -27,6 +27,8 @@ export default function FormTambahProdukPage() {
     sell_price: 0,
   });
 
+  const [image, setImage] = useState<File | null>(null);
+
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
@@ -55,11 +57,29 @@ export default function FormTambahProdukPage() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
+
+      const dataToSend = new FormData();
+
+      dataToSend.append("category_id", formData.category_id);
+      dataToSend.append("sku", formData.sku);
+      dataToSend.append("name", formData.name);
+      dataToSend.append("description", formData.description);
+      dataToSend.append("min_stock", formData.min_stock.toString());
+      dataToSend.append("purchase_price", formData.purchase_price.toString());
+      dataToSend.append("sell_price", formData.sell_price.toString());
+
+      if (image) {
+        dataToSend.append("image", image);
+      }
+
       const response = await axios.post(
         "http://127.0.0.1:8000/api/admin/products/createProduct",
         formData,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         },
       );
       setMessage(response.data.message);
@@ -79,7 +99,17 @@ export default function FormTambahProdukPage() {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setImage(e.target.files[0]); // Ambil file pertama yang di-upload
+    }
   };
 
   return (
@@ -104,7 +134,7 @@ export default function FormTambahProdukPage() {
                   {/* Dropdown Kategori */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Kategori
+                      Kategori <span className="text-red-500">*</span>
                     </label>
                     <select
                       name="category_id"
@@ -125,7 +155,8 @@ export default function FormTambahProdukPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        SKU (Kode Barang)
+                        SKU (Kode Barang){" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -137,7 +168,19 @@ export default function FormTambahProdukPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Nama Produk
+                        Gambar Produk <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="file"
+                        name="image"
+                        onChange={handleFileChange}
+                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Nama Produk <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -153,7 +196,7 @@ export default function FormTambahProdukPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Harga Beli
+                        Harga Beli <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="number"
@@ -165,7 +208,7 @@ export default function FormTambahProdukPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Harga Jual
+                        Harga Jual <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="number"
@@ -179,7 +222,7 @@ export default function FormTambahProdukPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Minimal Stok
+                      Minimal Stok <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -192,7 +235,7 @@ export default function FormTambahProdukPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Deskripsi
+                      Deskripsi <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       name="description"

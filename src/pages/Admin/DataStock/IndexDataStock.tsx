@@ -19,7 +19,12 @@ import type { Stock } from "@/pages/types/Stock";
 export default function DataStockAdminPages() {
   const [stocks, setStocks] = useState<Stock[]>([]);
 
-  const GetAllStock = useCallback(async () => {
+  const [pagination, setPaginations] = useState({
+    current_page: 1,
+    last_page: 1,
+  });
+
+  const GetAllStock = useCallback(async (page: number = 1) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
@@ -31,7 +36,11 @@ export default function DataStockAdminPages() {
         },
       );
 
-      setStocks(response.data.data);
+      setStocks(response.data.data.data);
+      setPaginations({
+        current_page: response.data.data.current_page,
+        last_page: response.data.data.last_page,
+      });
     } catch (error) {
       console.error("Error : ", error);
     }
@@ -106,6 +115,28 @@ export default function DataStockAdminPages() {
                     ))}
                   </TableBody>
                 </Table>
+
+                {/* Paginations */}
+                <div className="flex justify-center items-center mt-6 space-x-2">
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={pagination.current_page === 1}
+                    onClick={() => GetAllStock(pagination.current_page - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-600">
+                    Halaman {pagination.current_page} dari{" "}
+                    {pagination.last_page}
+                  </span>
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={pagination.current_page === pagination.last_page}
+                    onClick={() => GetAllStock(pagination.current_page + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
               </CardContent>
             </Card>
           </div>

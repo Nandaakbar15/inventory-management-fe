@@ -113,7 +113,7 @@ export default function FormEditDataStockAdminPages() {
                   {/* Dropdown Produk */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Produk
+                      Produk <span className="text-red-500">*</span>
                     </label>
                     <select
                       name="product_id"
@@ -134,7 +134,7 @@ export default function FormEditDataStockAdminPages() {
                   {/* Jumlah Stok */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Jumlah Stok
+                      Jumlah Stok <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -150,7 +150,7 @@ export default function FormEditDataStockAdminPages() {
                   {/* Lokasi */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Lokasi
+                      Lokasi <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"

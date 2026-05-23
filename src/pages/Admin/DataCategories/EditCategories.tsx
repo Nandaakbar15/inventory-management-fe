@@ -94,7 +94,7 @@ export default function FormEditCategories() {
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700 text-[16px]"
                     >
-                      Nama Kategori
+                      Nama Kategori <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -110,7 +110,7 @@ export default function FormEditCategories() {
                       htmlFor="slug"
                       className="block text-sm font-medium text-gray-700 text-[16px]"
                     >
-                      Slug
+                      Slug <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"

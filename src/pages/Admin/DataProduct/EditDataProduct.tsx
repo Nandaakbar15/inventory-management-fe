@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
@@ -11,6 +12,8 @@ import Modal from "@/components/Modal";
 export default function FormEditProdukPage() {
   const { id } = useParams();
   const [categories, setCategories] = useState<Categories[]>([]);
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     category_id: "",
     sku: "",
@@ -20,6 +23,14 @@ export default function FormEditProdukPage() {
     purchase_price: 0,
     sell_price: 0,
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setImage(file); // Simpan file binary untuk dikirim ke API
+      setPreview(URL.createObjectURL(file)); // Buat blob URL untuk preview gambar baru
+    }
+  };
 
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -58,6 +69,7 @@ export default function FormEditProdukPage() {
         const {
           category_id,
           sku,
+          image: existingImage,
           name,
           description,
           min_stock,
@@ -74,6 +86,11 @@ export default function FormEditProdukPage() {
           purchase_price,
           sell_price,
         });
+
+        if (existingImage) {
+          // Sesuaikan path-nya dengan storage Laravel kamu, contoh:
+          setPreview(`http://127.0.0.1:8000/images/${existingImage}`);
+        }
       } catch (error) {
         console.error("Error : ", error);
       }
@@ -87,11 +104,30 @@ export default function FormEditProdukPage() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(
+      const dataToSend = new FormData();
+
+      dataToSend.append("_method", "PUT");
+
+      dataToSend.append("category_id", formData.category_id);
+      dataToSend.append("sku", formData.sku);
+      dataToSend.append("name", formData.name);
+      dataToSend.append("description", formData.description);
+      dataToSend.append("min_stock", formData.min_stock.toString());
+      dataToSend.append("purchase_price", formData.purchase_price.toString());
+      dataToSend.append("sell_price", formData.sell_price.toString());
+
+      if (image) {
+        dataToSend.append("image", image);
+      }
+
+      const response = await axios.post(
         `http://127.0.0.1:8000/api/admin/products/updateproduct/${id}`,
-        formData,
+        dataToSend,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         },
       );
       setMessage(response.data.message);
@@ -162,6 +198,31 @@ export default function FormEditProdukPage() {
                         onChange={handleChange}
                         className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
                         required
+                      />
+                    </div>
+
+                    {/* Kolom Upload Gambar */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Foto Produk (Kosongkan jika tidak ingin diubah)
+                      </label>
+
+                      {/* Tampilkan box preview jika link gambarnya tersedia */}
+                      {preview && (
+                        <div className="mt-2 mb-2">
+                          <img
+                            src={preview}
+                            alt="Preview Produk"
+                            className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+                          />
+                        </div>
+                      )}
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-600 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                       />
                     </div>
                     <div>

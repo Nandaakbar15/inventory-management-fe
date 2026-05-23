@@ -24,8 +24,12 @@ export default function DataSupplierAdminPages() {
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const [pagination, setPaginations] = useState({
+    current_page: 1,
+    last_page: 1,
+  });
 
-  const GetAllSuppliers = useCallback(async () => {
+  const GetAllSuppliers = useCallback(async (page: number = 1) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
@@ -37,7 +41,11 @@ export default function DataSupplierAdminPages() {
         },
       );
 
-      setSuppliers(response.data.data);
+      setSuppliers(response.data.data.data);
+      setPaginations({
+        current_page: response.data.data.current_page,
+        last_page: response.data.data.last_page,
+      });
     } catch (error) {
       console.error("Error : ", error);
     }
@@ -141,6 +149,28 @@ export default function DataSupplierAdminPages() {
                     ))}
                   </TableBody>
                 </Table>
+
+                {/* Paginations */}
+                <div className="flex justify-center items-center mt-6 space-x-2">
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={pagination.current_page === 1}
+                    onClick={() => GetAllSuppliers(pagination.current_page - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-600">
+                    Halaman {pagination.current_page} dari{" "}
+                    {pagination.last_page}
+                  </span>
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={pagination.current_page === pagination.last_page}
+                    onClick={() => GetAllSuppliers(pagination.current_page + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
               </CardContent>
             </Card>
           </div>

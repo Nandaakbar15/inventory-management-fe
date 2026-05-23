@@ -114,7 +114,7 @@ export default function FormEditDataSupplier() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Kontak
+                        Kontak <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -127,7 +127,7 @@ export default function FormEditDataSupplier() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Nomor Telepon
+                        Nomor Telepon <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -142,7 +142,7 @@ export default function FormEditDataSupplier() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Alamat
+                        Alamat <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"

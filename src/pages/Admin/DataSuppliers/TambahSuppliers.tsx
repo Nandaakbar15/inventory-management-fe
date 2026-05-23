@@ -78,7 +78,7 @@ export default function FormTambahSupplier() {
                 <form onSubmit={AddSupplier} className="space-y-4 p-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Nama
+                      Nama <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -91,7 +91,7 @@ export default function FormTambahSupplier() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Kontak
+                        Kontak <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -103,7 +103,7 @@ export default function FormTambahSupplier() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Nomor Telepon
+                        Nomor Telepon <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -117,7 +117,7 @@ export default function FormTambahSupplier() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        Alamat
+                        Alamat <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -138,7 +138,7 @@ export default function FormTambahSupplier() {
               </CardContent>
               <CardFooter>
                 <div>
-                  <Link to={"/admin/data_supplier"}>
+                  <Link to={"/admin/data_suppliers"}>
                     <button className="inline-block rounded-lg shadow-lg text-white bg-slate-500 hover:bg-slate-700 px-4 py-2">
                       Kembali
                     </button>

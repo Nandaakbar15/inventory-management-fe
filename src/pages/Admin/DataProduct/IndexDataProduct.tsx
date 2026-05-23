@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,8 +26,12 @@ export default function IndexDataProductAdminPages() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [pagination, setPaginations] = useState({
+    current_page: 1,
+    last_page: 1,
+  });
 
-  const getProducts = useCallback(async () => {
+  const getProducts = useCallback(async (page: number = 1) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
@@ -39,7 +43,11 @@ export default function IndexDataProductAdminPages() {
         },
       );
 
-      setProducts(response.data.data);
+      setProducts(response.data.data.data);
+      setPaginations({
+        current_page: response.data.data.current_page,
+        last_page: response.data.data.last_page,
+      });
     } catch (error) {
       console.error("Error : ", error);
     }
@@ -95,69 +103,103 @@ export default function IndexDataProductAdminPages() {
               <p className="text-center text-gray-700">{message}</p>
             </Modal>
             <Card>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="font-semibold text-[16px] px-4 py-2">
-                      ID Category
-                    </TableHead>
-                    <TableHead className="font-semibold text-[16px] px-4 py-2">
-                      SKU
-                    </TableHead>
-                    <TableHead className="font-semibold text-[16px] px-4 py-2">
-                      Nama Produk
-                    </TableHead>
-                    <TableHead className="font-semibold text-[16px] px-4 py-2">
-                      Min Stock
-                    </TableHead>
-                    <TableHead className="font-semibold text-[16px] px-4 py-2">
-                      Purchase Price
-                    </TableHead>
-                    <TableHead className="font-semibold text-[16px] px-4 py-2">
-                      Sell Price
-                    </TableHead>
-                    <TableHead>Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {products.map((data) => (
-                    <TableRow key={data.id}>
-                      <TableCell className="font-medium border border-gray-300 px-4 py-2">
-                        {data.category_id}
-                      </TableCell>
-                      <TableCell className="font-medium border border-gray-300 px-4 py-2">
-                        {data.sku}
-                      </TableCell>
-                      <TableCell className="font-medium border border-gray-300 px-4 py-2">
-                        {data.name}
-                      </TableCell>
-                      <TableCell className="font-medium border border-gray-300 px-4 py-2">
-                        {data.purchase_price}
-                      </TableCell>
-                      <TableCell className="font-medium border border-gray-300 px-4 py-2">
-                        {data.min_stock}
-                      </TableCell>
-                      <TableCell className="font-medium border border-gray-300 px-4 py-2">
-                        {data.sell_price}
-                      </TableCell>
-                      <TableCell className="border border-gray-300 px-4 py-2 space-x-2">
-                        <Link
-                          to={`/admin/edit_produk/${data.id}`}
-                          className="inline-block rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          className="inline-block rounded-lg px-4 py-2  bg-red-500 hover:bg-red-700 text-white"
-                          onClick={() => deleteProduct(data.id)}
-                        >
-                          Delete
-                        </button>
-                      </TableCell>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        ID Category
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        SKU
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        Gambar
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        Nama Produk
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        Min Stock
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        Purchase Price
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        Sell Price
+                      </TableHead>
+                      <TableHead>Aksi</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {products.map((data) => (
+                      <TableRow key={data.id}>
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.category_id}
+                        </TableCell>
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.sku}
+                        </TableCell>
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          <img
+                            src={`http://127.0.0.1:8000/images/${data.image}`}
+                            alt=""
+                            className="w-32"
+                          />
+                        </TableCell>
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.name}
+                        </TableCell>
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          $. {data.purchase_price}
+                        </TableCell>
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.min_stock}
+                        </TableCell>
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          $. {data.sell_price}
+                        </TableCell>
+                        <TableCell className="border border-gray-300 px-4 py-2 space-x-2">
+                          <Link
+                            to={`/admin/edit_produk/${data.id}`}
+                            className="inline-block rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            className="inline-block rounded-lg px-4 py-2  bg-red-500 hover:bg-red-700 text-white"
+                            onClick={() => deleteProduct(data.id)}
+                          >
+                            Delete
+                          </button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+
+                {/* Paginations */}
+                <div className="flex justify-center items-center mt-6 space-x-2">
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={pagination.current_page === 1}
+                    onClick={() => getProducts(pagination.current_page - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-600">
+                    Halaman {pagination.current_page} dari{" "}
+                    {pagination.last_page}
+                  </span>
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={pagination.current_page === pagination.last_page}
+                    onClick={() => getProducts(pagination.current_page + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </CardContent>
             </Card>
           </div>
         </div>
