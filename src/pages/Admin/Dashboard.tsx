@@ -1,4 +1,6 @@
 import Cards from "@/components/Cards";
+import Cards2 from "@/components/Cards2";
+import Cards3 from "@/components/Cards3";
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
 
@@ -10,14 +12,14 @@ export default function DashboardAdminPages() {
         <NavBarAdmin />
         <div className="flex-1 p-6 overflow-y-auto mt-7">
           <h1 className="font-medium text-3xl">Welcome Admin</h1>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum,
-            quas.
-          </p>
+          <p>Ini adalah halaman admin</p>
           <div className="flex item-center mt-1.5">
             <Cards />
             <div className="mx-1.5">
-              <Cards />
+              <Cards2 />
+            </div>
+            <div className="mx-1 5">
+              <Cards3 />
             </div>
           </div>
         </div>

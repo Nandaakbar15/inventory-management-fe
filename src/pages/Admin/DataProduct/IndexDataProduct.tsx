@@ -143,7 +143,7 @@ export default function IndexDataProductAdminPages() {
                         <TableCell className="font-medium border border-gray-300 px-4 py-2">
                           <img
                             src={`http://127.0.0.1:8000/images/${data.image}`}
-                            alt=""
+                            alt={data.name}
                             className="w-32"
                           />
                         </TableCell>
@@ -166,6 +166,14 @@ export default function IndexDataProductAdminPages() {
                           >
                             Edit
                           </Link>
+
+                          <Link
+                            to={`/admin/detail_product/${data.id}`}
+                            className="inline-block rounded-lg px-4 py-2 text-white shadow-lg bg-slate-500 hover:bg-slate-700"
+                          >
+                            Detail
+                          </Link>
+
                           <button
                             className="inline-block rounded-lg px-4 py-2  bg-red-500 hover:bg-red-700 text-white"
                             onClick={() => deleteProduct(data.id)}

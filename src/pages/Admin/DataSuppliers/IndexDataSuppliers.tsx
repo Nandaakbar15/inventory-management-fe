@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Card, CardContent } from "@/components/ui/card";
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
@@ -99,6 +98,9 @@ export default function DataSupplierAdminPages() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        ID Supplier
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
                         Name
                       </TableHead>
                       <TableHead className="font-semibold text-[16px] px-4 py-2">
@@ -119,6 +121,9 @@ export default function DataSupplierAdminPages() {
                     {suppliers.map((data) => (
                       <TableRow key={data.id}>
                         <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
+                          {data.id}
+                        </TableCell>
+                        <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
                           {data.name}
                         </TableCell>
                         <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
@@ -136,6 +141,13 @@ export default function DataSupplierAdminPages() {
                             className="inline-block text-white rounded-lg shadow-lg bg-blue-500 hover:bg-blue-700 px-4 py-2"
                           >
                             Edit
+                          </Link>
+
+                          <Link
+                            to={`/admin/detail_supplier/${data.id}`}
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-slate-500 hover:bg-slate-700"
+                          >
+                            Detail
                           </Link>
 
                           <button

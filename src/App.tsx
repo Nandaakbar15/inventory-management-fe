@@ -14,6 +14,8 @@ import DataStockAdminPages from "./pages/Admin/DataStock/IndexDataStock";
 import FormTambahDataStockAdminPages from "./pages/Admin/DataStock/TambahDataStock";
 import FormEditDataStockAdminPages from "./pages/Admin/DataStock/EditDataStock";
 import FormEditCategories from "./pages/Admin/DataCategories/EditCategories";
+import DetailProduct from "./pages/Admin/DataProduct/DetailProduct";
+import DetailSupplier from "./pages/Admin/DataSuppliers/DetailSupplier";
 
 function App() {
   return (
@@ -76,6 +78,14 @@ function App() {
         <Route
           path="/admin/edit_data_stock/:id"
           element={<FormEditDataStockAdminPages />}
+        ></Route>
+        <Route
+          path="/admin/detail_product/:id"
+          element={<DetailProduct />}
+        ></Route>
+        <Route
+          path="/admin/detail_supplier/:id"
+          element={<DetailSupplier />}
         ></Route>
       </Routes>
     </BrowserRouter>
