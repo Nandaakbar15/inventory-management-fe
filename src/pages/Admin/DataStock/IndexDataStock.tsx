@@ -83,6 +83,9 @@ export default function DataStockAdminPages() {
                         Lokasi
                       </TableHead>
                       <TableHead className="font-semibold text-[16px] px-4 py-2">
+                        Tanggal Expired
+                      </TableHead>
+                      <TableHead className="font-semibold text-[16px] px-4 py-2">
                         Aksi
                       </TableHead>
                     </TableRow>
@@ -98,6 +101,9 @@ export default function DataStockAdminPages() {
                         </TableCell>
                         <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
                           {data.location}
+                        </TableCell>
+                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
+                          {data.expiration_date.toString()}
                         </TableCell>
                         <TableCell className="border border-gray-300 px-4 py-2 space-x-2">
                           <Link

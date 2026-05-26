@@ -13,6 +13,7 @@ export default function FormEditDataStockAdminPages() {
   const [productId, setProductId] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [location, setLocation] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -48,11 +49,13 @@ export default function FormEditDataStockAdminPages() {
           },
         );
 
-        const { product_id, quantity, location } = response.data.data;
+        const { product_id, quantity, location, expiration_date } =
+          response.data.data;
 
         setProductId(product_id);
         setQuantity(quantity);
         setLocation(location);
+        setExpirationDate(expiration_date);
       } catch (error) {
         console.error("Errror : ", error);
       }
@@ -72,6 +75,7 @@ export default function FormEditDataStockAdminPages() {
           product_id: productId,
           quantity: quantity,
           location: location,
+          expiration_date: expirationDate,
         },
         {
           headers: {
@@ -162,11 +166,26 @@ export default function FormEditDataStockAdminPages() {
                     />
                   </div>
 
+                  {/* Tanggal Expired */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Tanggal Expired <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      name="expiration_date"
+                      value={expirationDate}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                      required
+                    />
+                  </div>
+
                   <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
                   >
-                    Simpan Stok
+                    Ubah Stok
                   </button>
                 </form>
               </CardContent>

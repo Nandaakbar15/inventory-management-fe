@@ -6,4 +6,5 @@ export type Stock = {
   product?: Product;
   quantity: number;
   location: string;
+  expiration_date: Date;
 };

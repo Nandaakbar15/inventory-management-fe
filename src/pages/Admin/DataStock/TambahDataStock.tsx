@@ -12,6 +12,7 @@ export default function FormTambahDataStockAdminPages() {
   const [productId, setProductId] = useState("");
   const [quantity, setQuantity] = useState("");
   const [location, setLocation] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +30,7 @@ export default function FormTambahDataStockAdminPages() {
             },
           },
         );
-        setProducts(res.data.data);
+        setProducts(res.data.data.data);
       } catch (error) {
         console.error("Error : ", error);
       }
@@ -48,6 +49,7 @@ export default function FormTambahDataStockAdminPages() {
           product_id: productId,
           quantity: quantity,
           location: location,
+          expiration_date: expirationDate,
         },
         {
           headers: {
@@ -127,6 +129,20 @@ export default function FormTambahDataStockAdminPages() {
                       type="text"
                       name="location"
                       onChange={(e) => setLocation(e.target.value)}
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                      required
+                    />
+                  </div>
+
+                  {/* Tanggal Expired */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Tanggal Expired <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      name="expiration_date"
+                      onChange={(e) => setExpirationDate(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
                       required
                     />
