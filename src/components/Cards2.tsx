@@ -57,6 +57,11 @@ export default function Cards2() {
               {bestSellingProduct.description || "Tidak ada deskripsi."}
             </p>
 
+            <p className="text-green-100 text-sm font-sans line-clamp-2 mt-1">
+              Harga jual: $.{" "}
+              {bestSellingProduct.sell_price || "Tidak ada harga jual."}
+            </p>
+
             <div className="mt-3">
               <Link
                 to={`/admin/detail_product/${bestSellingProduct.id}`}

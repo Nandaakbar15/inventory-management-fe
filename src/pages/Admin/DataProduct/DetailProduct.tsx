@@ -72,6 +72,9 @@ export default function DetailProduct() {
               </h5>
               <p className="mb-6 text-body">SKU: {sku}</p>
               <p className="mb-6 text-body">Deskripsi: {description}</p>
+              <p className="mb-6 text-body">
+                Harga Pembelian: $. {purchasePrice}
+              </p>
               <div>
                 <Link to={"/admin/dashboard"}>
                   <button

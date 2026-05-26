@@ -19,7 +19,7 @@ export default function FormEditDataStockAdminPages() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductsById = async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
@@ -30,7 +30,7 @@ export default function FormEditDataStockAdminPages() {
             },
           },
         );
-        setProducts(res.data.data);
+        setProducts(res.data.data.data);
       } catch (error) {
         console.error("Error : ", error);
       }
@@ -58,7 +58,7 @@ export default function FormEditDataStockAdminPages() {
       }
     };
 
-    fetchProducts();
+    fetchProductsById();
     getStockById();
   }, [id]);
 
@@ -66,8 +66,8 @@ export default function FormEditDataStockAdminPages() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/admin/stock/createStock",
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/admin/stock/updateStock/${id}`,
         {
           product_id: productId,
           quantity: quantity,
@@ -105,7 +105,7 @@ export default function FormEditDataStockAdminPages() {
           <Modal show={showModal} onClose={() => setShowModal(false)}>
             <p className="text-center text-gray-700">{message}</p>
           </Modal>
-          <h1 className="font-medium text-3xl">Form Tambah Stock Produk</h1>
+          <h1 className="font-medium text-3xl">Form Edit Stock Produk</h1>
           <div className="mx-auto mt-10 max-w">
             <Card>
               <CardContent>

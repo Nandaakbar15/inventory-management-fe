@@ -45,7 +45,7 @@ export default function FormTambahProdukPage() {
             },
           },
         );
-        setCategories(res.data.data);
+        setCategories(res.data.data.data);
       } catch (error) {
         console.error("Error : ", error);
       }
