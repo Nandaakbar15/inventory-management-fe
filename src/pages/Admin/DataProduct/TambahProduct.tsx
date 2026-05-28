@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Card,
   CardContent,
@@ -74,7 +73,7 @@ export default function FormTambahProdukPage() {
 
       const response = await axios.post(
         "http://127.0.0.1:8000/api/admin/products/createProduct",
-        formData,
+        dataToSend,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,6 +89,8 @@ export default function FormTambahProdukPage() {
         navigate("/admin/data_products");
       }, 2000);
     } catch (error) {
+      setMessage("Error, terjadi kesalahan pada sistem!");
+      setShowModal(true);
       console.error("Gagal tambah produk:", error);
     }
   };
@@ -204,6 +205,8 @@ export default function FormTambahProdukPage() {
                         onChange={handleChange}
                         className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
                         required
+                        step="0.01"
+                        min="0"
                       />
                     </div>
                     <div>
@@ -216,6 +219,8 @@ export default function FormTambahProdukPage() {
                         onChange={handleChange}
                         className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
                         required
+                        step="0.01"
+                        min="0"
                       />
                     </div>
                   </div>

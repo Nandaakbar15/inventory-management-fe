@@ -105,9 +105,13 @@ export default function IndexDataUsersPages() {
                         {data.email}
                       </TableCell>
                       <TableCell className="border border-gray-300 px-4 py-2 space-x-2">
-                        <button className="inline-block rounded-lg bg-slate-400 px-4 py-2 text-white hover:bg-slate-600">
+                        <Link
+                          to={`/admin/detail_user/${data.id}`}
+                          className="inline-block rounded-lg bg-slate-400 px-4 py-2 text-white hover:bg-slate-600"
+                        >
                           Detail User
-                        </button>
+                        </Link>
+
                         <button
                           className="inline-block rounded-lg px-4 py-2  bg-red-500 hover:bg-red-700 text-white"
                           onClick={() => deleteUser(data.id)}

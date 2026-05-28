@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
-import { Card, CardContent } from "@/components/ui/card";
+import axios from "axios";
+
 import {
   Table,
   TableBody,
@@ -11,32 +12,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
-import { useEffect, useState, useCallback } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+
+import type { Transaksi } from "@/pages/types/Transaksi";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import type { Stock } from "@/pages/types/Stock";
 
 import Modal from "@/components/Modal";
 
-export default function DataStockAdminPages() {
-  const [stocks, setStocks] = useState<Stock[]>([]);
+export default function DataTransaksiAdminPages() {
+  const [transaksi, setTransaksi] = useState<Transaksi[]>([]);
 
-  const [pagination, setPaginations] = useState({
+  const [pagination, setPagination] = useState({
     current_page: 1,
     last_page: 1,
   });
 
   const [message, setMessage] = useState("");
-
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
 
-  const GetAllStock = useCallback(async (page: number = 1) => {
+  const fetchDataTransaksi = async (page: number = 1) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/stock/getAllStocks",
+        "http://127.0.0.1:8000/api/admin/transaksi/getAllTransaksi",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,25 +45,21 @@ export default function DataStockAdminPages() {
         },
       );
 
-      setStocks(response.data.data.data);
-      setPaginations({
+      setTransaksi(response.data.data.data);
+      setPagination({
         current_page: response.data.data.current_page,
         last_page: response.data.data.last_page,
       });
     } catch (error) {
       console.error("Error : ", error);
     }
-  }, []);
+  };
 
-  useEffect(() => {
-    GetAllStock();
-  }, [GetAllStock]);
-
-  const deleteStock = async (id: number) => {
+  const deleteDataTransaksi = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/admin/stock/deleteStock/${id}`,
+        `http://127.0.0.1:8000/api/admin/transaksi/deleteDataTransaksi/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,36 +71,37 @@ export default function DataStockAdminPages() {
       setShowModal(true);
 
       // refresh the data
-      GetAllStock();
+      fetchDataTransaksi();
 
       setTimeout(() => {
         setShowModal(false);
-        navigate("/admin/data_stock");
+        navigate("/admin/data_transaksi");
       }, 2000);
     } catch (error) {
-      setMessage("Error, gagal menghapus data!");
+      setMessage("Gagal menghapus data!");
       setShowModal(true);
       console.error("Error : ", error);
     }
   };
 
+  useEffect(() => {
+    fetchDataTransaksi();
+  }, []);
   return (
     <div className="flex h-screen bg-white">
       <SideBarAdmin />
       <div className="flex flex-1 flex-col">
         <NavBarAdmin />
         <div className="flex-1 p-6 overflow-y-auto mt-7">
-          <h1 className="font-medium text-3xl">Data Stock Produk</h1>
-          <div className="mt-3">
-            <h2>
-              <Link
-                to={"/admin/tambah_data_stock"}
-                className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
-              >
-                Tambah Data Stok Produk
-              </Link>
-            </h2>
-          </div>
+          <h1 className="font-medium text-3xl">Data Transaksi</h1>
+          <h2 className="mt-2">
+            <Link
+              to={"/admin/tambah_data_transaksi"}
+              className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
+            >
+              Tambah Data Transaksi
+            </Link>
+          </h2>
           <div className="overflow-x-auto">
             <Modal show={showModal} onClose={() => setShowModal(false)}>
               <p className="text-center text-gray-700">{message}</p>
@@ -113,61 +111,55 @@ export default function DataStockAdminPages() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        ID Stock
+                      <TableHead className="font-medium px-4 py-2 text-[16px]">
+                        ID Transaksi
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        ID Produk
-                      </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                      <TableHead className="font-medium px-4 py-2 text-[16px">
                         Nama Produk
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Jumlah Stok Produk
+                      <TableHead className="font-medium px-4 py-2 text-[16px]">
+                        Total Penjualan
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Lokasi
+                      <TableHead className="font-medium px-4 py-2 text-[16px]">
+                        Tanggal Transaksi Masuk
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Tanggal Expired
+                      <TableHead className="font-medium px-4 py-2 text-[16px]">
+                        Tanggal Transaksi Keluar
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                      <TableHead className="font-medium px-4 py-2 text-[16px]">
                         Aksi
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {stocks.map((data) => (
+                    {transaksi.map((data) => (
                       <TableRow key={data.id}>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
                           {data.id}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.product_id}
-                        </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
                           {data.product?.name}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.quantity}
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
+                          {data.penjualan?.total_penjualan}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.location}
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
+                          {data.tgl_transaksi_masuk.toString()}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.expiration_date.toString()}
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
+                          {data.tgl_transaksi_keluar.toString()}
                         </TableCell>
-                        <TableCell className="border border-gray-300 px-4 py-2 space-x-2">
+                        <TableCell className="space-x-2 px-4 py-2 border border-gray-300">
                           <Link
-                            to={`/admin/edit_data_stock/${data.id}`}
-                            className="inline-block rounded-lg shadow-lg text-white px-4 py-2 bg-blue-500 hover:bg-blue-700"
+                            to={`/admin/edit_data_transaksi/${data.id}`}
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
                           >
                             Edit
                           </Link>
 
                           <button
-                            className="inline-block rounded-lg shadow-lg text-white px-4 py-2 bg-red-500 hover:bg-red-700"
-                            onClick={() => deleteStock(data.id)}
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700"
+                            onClick={() => deleteDataTransaksi(data.id)}
                           >
                             Delete
                           </button>
@@ -182,7 +174,9 @@ export default function DataStockAdminPages() {
                   <button
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={pagination.current_page === 1}
-                    onClick={() => GetAllStock(pagination.current_page - 1)}
+                    onClick={() =>
+                      fetchDataTransaksi(pagination.current_page - 1)
+                    }
                   >
                     Previous
                   </button>
@@ -193,7 +187,9 @@ export default function DataStockAdminPages() {
                   <button
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={pagination.current_page === pagination.last_page}
-                    onClick={() => GetAllStock(pagination.current_page + 1)}
+                    onClick={() =>
+                      fetchDataTransaksi(pagination.current_page + 1)
+                    }
                   >
                     Next
                   </button>

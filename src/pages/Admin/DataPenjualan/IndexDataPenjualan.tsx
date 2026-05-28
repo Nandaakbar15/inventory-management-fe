@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Card, CardContent } from "@/components/ui/card";
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,27 +12,33 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import axios from "axios";
 import Modal from "@/components/Modal";
-import { Link, useNavigate } from "react-router-dom";
-import type { Supplier } from "@/pages/types/Supplier";
-import { useCallback, useEffect, useState } from "react";
 
-export default function DataSupplierAdminPages() {
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+import { Link, useNavigate } from "react-router-dom";
+
+import type { Penjualan } from "@/pages/types/Penjualan";
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+export default function DataPenjualanAdminPages() {
+  const [penjualan, setPenjualan] = useState<Penjualan[]>([]);
+
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
+
   const [pagination, setPaginations] = useState({
     current_page: 1,
     last_page: 1,
   });
 
-  const GetAllSuppliers = useCallback(async (page: number = 1) => {
+  const navigate = useNavigate();
+
+  const fetchPenjualan = async (page: number = 1) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/suppliers/getAllSuppliers",
+        "http://127.0.0.1:8000/api/admin/penjualan/getAllPenjualan",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +46,7 @@ export default function DataSupplierAdminPages() {
         },
       );
 
-      setSuppliers(response.data.data.data);
+      setPenjualan(response.data.data.data);
       setPaginations({
         current_page: response.data.data.current_page,
         last_page: response.data.data.last_page,
@@ -48,33 +54,38 @@ export default function DataSupplierAdminPages() {
     } catch (error) {
       console.error("Error : ", error);
     }
-  }, []);
+  };
 
-  const deleteSupplier = async (id: number) => {
+  const deletePenjualan = async (id: number) => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/admin/suppliers/deleteSupplier/${id}`,
+        `http://127.0.0.1:8000/api/admin/penjualan/deleteDataPenjualan/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       setMessage(response.data.message);
       setShowModal(true);
 
-      GetAllSuppliers();
+      // refresh the data
+      fetchPenjualan();
 
       setTimeout(() => {
+        navigate("/admin/data_penjualan");
         setShowModal(false);
-        navigate("/admin/data_supplier");
       }, 2000);
     } catch (error) {
-      setMessage("Error, gagal menghapus data!");
-      setShowModal(true);
       console.error("Error : ", error);
     }
   };
 
   useEffect(() => {
-    GetAllSuppliers();
-  }, [GetAllSuppliers]);
+    fetchPenjualan();
+  }, []);
 
   return (
     <div className="flex h-screen bg-white">
@@ -82,79 +93,64 @@ export default function DataSupplierAdminPages() {
       <div className="flex flex-1 flex-col">
         <NavBarAdmin />
         <div className="flex-1 p-6 overflow-y-auto mt-7">
-          <Modal show={showModal} onClose={() => setShowModal(false)}>
-            <p className="text-center text-gray-700">{message}</p>
-          </Modal>
-          <h1 className="font-medium text-3xl">Data Supplier</h1>
+          <h1 className="font-medium text-3xl">Halaman Data Penjualan</h1>
           <h2 className="mt-4">
-            <Link to={"/admin/tambah_data_supplier"}>
-              <button className="inline-block rounded-lg shadow-lg text-white bg-blue-500 hover:bg-blue-700 px-4 py-2">
-                Tambah Supplier
-              </button>
+            <Link
+              to={"/admin/tambah_data_penjualan"}
+              className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
+            >
+              Tambah Data Penjualan
             </Link>
           </h2>
           <div className="overflow-x-auto">
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+              <p className="text-center text-gray-700">{message}</p>
+            </Modal>
             <Card>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        ID Supplier
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
+                        ID Produk
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Name
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
+                        ID Kategori
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Contact Person
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
+                        Total Penjualan
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Phone
-                      </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Address
-                      </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Aksi
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
+                        Tanggal Penjualan
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {suppliers.map((data) => (
+                    {penjualan.map((data) => (
                       <TableRow key={data.id}>
-                        <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
-                          {data.id}
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.product_id}
                         </TableCell>
-                        <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
-                          {data.name}
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.category_id}
                         </TableCell>
-                        <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
-                          {data.contact_person}
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.total_penjualan}
                         </TableCell>
-                        <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
-                          {data.phone}
-                        </TableCell>
-                        <TableCell className="font-medium text-[16px] px-4 py-2 border border-gray-300">
-                          {data.address}
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.tgl_penjualan.toString()}
                         </TableCell>
                         <TableCell className="space-x-2 border border-gray-300 px-4 py-2">
                           <Link
-                            to={`/admin/edit_data_suppliers/${data.id}`}
-                            className="inline-block text-white rounded-lg shadow-lg bg-blue-500 hover:bg-blue-700 px-4 py-2"
+                            to={`/admin/edit_data_penjualan/${data.id}`}
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
                           >
                             Edit
                           </Link>
 
-                          <Link
-                            to={`/admin/detail_supplier/${data.id}`}
-                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-slate-500 hover:bg-slate-700"
-                          >
-                            Detail
-                          </Link>
-
                           <button
-                            className="inline-block text-white rounded-lg shadow-lg bg-red-500 hover:bg-red-700 px-4 py-2"
-                            onClick={() => deleteSupplier(data.id)}
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700"
+                            onClick={() => deletePenjualan(data.id)}
                           >
                             Delete
                           </button>
@@ -169,7 +165,7 @@ export default function DataSupplierAdminPages() {
                   <button
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={pagination.current_page === 1}
-                    onClick={() => GetAllSuppliers(pagination.current_page - 1)}
+                    onClick={() => fetchPenjualan(pagination.current_page - 1)}
                   >
                     Previous
                   </button>
@@ -180,7 +176,7 @@ export default function DataSupplierAdminPages() {
                   <button
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={pagination.current_page === pagination.last_page}
-                    onClick={() => GetAllSuppliers(pagination.current_page + 1)}
+                    onClick={() => fetchPenjualan(pagination.current_page + 1)}
                   >
                     Next
                   </button>

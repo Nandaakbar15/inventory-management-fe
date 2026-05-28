@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Card,
   CardContent,
@@ -47,6 +46,8 @@ export default function FormTambahCategories() {
         setShowModal(false);
       }, 2000);
     } catch (error) {
+      setMessage("Error, terjadi kesalahan pada sistem!");
+      setShowModal(true);
       console.error("Error : ", error);
     }
   };

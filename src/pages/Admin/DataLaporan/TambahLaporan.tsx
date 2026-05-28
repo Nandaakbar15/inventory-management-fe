@@ -1,25 +1,25 @@
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Modal from "@/components/Modal";
 import { useEffect, useState } from "react";
 import type { Product } from "@/pages/types/Product";
+import type { Penjualan } from "@/pages/types/Penjualan";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Modal from "@/components/Modal";
 
-export default function FormTambahDataStockAdminPages() {
-  const [productId, setProductId] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [location, setLocation] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
+export default function FormTambahLaporan() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [penjualan, setPenjualan] = useState<Penjualan[]>([]);
+  const [productId, setProductId] = useState("");
+  const [penjualanId, setPenjualanId] = useState("");
+  const [tglLaporan, setTglLaporan] = useState("");
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProduct = async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
@@ -30,26 +30,45 @@ export default function FormTambahDataStockAdminPages() {
             },
           },
         );
+
         setProducts(res.data.data.data);
       } catch (error) {
         console.error("Error : ", error);
       }
     };
 
-    fetchProducts();
+    const fetchPenjualan = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          "http://127.0.0.1:8000/api/admin/penjualan/getAllPenjualan",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        setPenjualan(res.data.data.data);
+      } catch (error) {
+        console.error("Error : ", error);
+      }
+    };
+
+    fetchProduct();
+    fetchPenjualan();
   }, []);
 
-  const addStock = async (e: React.FormEvent) => {
+  const addReport = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/admin/stock/createStock",
+        "http://127.0.0.1:8000/api/admin/laporan/createLaporan",
         {
           product_id: productId,
-          quantity: quantity,
-          location: location,
-          expiration_date: expirationDate,
+          penjualan_id: penjualanId,
+          tgl_laporan: tglLaporan,
         },
         {
           headers: {
@@ -63,7 +82,7 @@ export default function FormTambahDataStockAdminPages() {
 
       setTimeout(() => {
         setShowModal(false);
-        navigate("/admin/data_stock");
+        navigate("/admin/data_laporan");
       }, 2000);
     } catch (error) {
       setMessage("Error, terjadi kesalahan pada sistem!");
@@ -81,87 +100,88 @@ export default function FormTambahDataStockAdminPages() {
           <Modal show={showModal} onClose={() => setShowModal(false)}>
             <p className="text-center text-gray-700">{message}</p>
           </Modal>
-          <h1 className="font-medium text-3xl">Form Tambah Stock Produk</h1>
-          <div className="mx-auto mt-10 max-w">
+          <h1 className="font-medium text-3xl">Form Tambah Laporan</h1>
+          <div className="mx-auto max-w mt-10">
             <Card>
               <CardContent>
-                <form onSubmit={addStock} className="space-y-4 p-6">
+                <form
+                  onSubmit={addReport}
+                  method="POST"
+                  className="space-y-4 animate-slide-down"
+                >
                   {/* Dropdown Produk */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Produk <span className="text-red-500">*</span>
+                      Product <span className="text-red-500">*</span>
                     </label>
                     <select
                       name="product_id"
-                      value={productId}
                       onChange={(e) => setProductId(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
                       required
                     >
                       <option value="">Pilih Produk</option>
-                      {products.map((product) => (
-                        <option key={product.id} value={product.id}>
-                          {product.name}
+                      {products.map((prod) => (
+                        <option key={prod.id} value={prod.id}>
+                          {prod.name}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  {/* Jumlah Stok */}
+                  {/* Dropdown Penjualan */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Jumlah Stok <span className="text-red-500">*</span>
+                      Penjualan <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="number"
-                      name="quantity"
-                      onChange={(e) => setQuantity(e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
-                      min={0}
-                      required
-                    />
-                  </div>
-
-                  {/* Lokasi */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Lokasi <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="location"
-                      onChange={(e) => setLocation(e.target.value)}
+                    <select
+                      name="penjualan_id"
+                      onChange={(e) => setPenjualanId(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
                       required
-                    />
+                    >
+                      <option value="">
+                        Pilih Data Penjualan berdasarkan totalnya
+                      </option>
+                      {penjualan.map((pen) => (
+                        <option key={pen.id} value={pen.id}>
+                          {pen.total_penjualan}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
-                  {/* Tanggal Expired */}
+                  {/* Tanggal Laooran */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Tanggal Expired <span className="text-red-500">*</span>
+                    <label
+                      htmlFor="tgl_laporan"
+                      className="block text-sm font-medium text-gray-700 text-[16px]"
+                    >
+                      Tanggal Laporan <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
-                      name="expiration_date"
-                      onChange={(e) => setExpirationDate(e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
-                      required
+                      id="tgl_laporan"
+                      name="tgl_laporan"
+                      onChange={(e) => setTglLaporan(e.target.value)}
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
                   >
-                    Simpan Stok
+                    Tambah!
                   </button>
                 </form>
               </CardContent>
               <CardFooter>
-                <Button variant="secondary" className="hover:bg-slate-400">
-                  <Link to="/admin/data_stock">Kembali</Link>
-                </Button>
+                <Link
+                  to={"/admin/data_laporan"}
+                  className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-slate-500 hover:bg-slate-700"
+                >
+                  Kembali
+                </Link>
               </CardFooter>
             </Card>
           </div>

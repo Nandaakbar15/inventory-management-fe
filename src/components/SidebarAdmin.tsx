@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from "react";
 import { Link } from "react-router";
 
 export default function SideBarAdmin() {
@@ -57,6 +55,24 @@ export default function SideBarAdmin() {
               className={linkClass("/admin/data_categories")}
             >
               Data Categories
+            </Link>
+            <Link
+              to={"/admin/data_penjualan"}
+              className={linkClass("/admin/data_penjualan")}
+            >
+              Data Penjualan
+            </Link>
+            <Link
+              to={"/admin/data_laporan"}
+              className={linkClass("/admin/data_laporan")}
+            >
+              Data Laporan
+            </Link>
+            <Link
+              to={"/admin/data_transaksi"}
+              className={linkClass("/admin/data_transaksi")}
+            >
+              Data Transaksi
             </Link>
           </div>
         </nav>

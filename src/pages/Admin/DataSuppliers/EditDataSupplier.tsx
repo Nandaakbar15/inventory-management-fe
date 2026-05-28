@@ -78,6 +78,8 @@ export default function FormEditDataSupplier() {
         navigate("/admin/data_suppliers");
       }, 2000);
     } catch (error) {
+      setMessage("Error, terjadi kesalahan pada sistem!");
+      setShowModal(true);
       console.error("Error : ", error);
     }
   };

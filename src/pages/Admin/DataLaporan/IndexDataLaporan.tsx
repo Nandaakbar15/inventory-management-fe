@@ -1,8 +1,9 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/set-state-in-effect */
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
 import { Card, CardContent } from "@/components/ui/card";
+
 import {
   Table,
   TableBody,
@@ -11,32 +12,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
-import { useEffect, useState, useCallback } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
-import type { Stock } from "@/pages/types/Stock";
+
+import type { Laporan } from "@/pages/types/Laporan";
+
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 import Modal from "@/components/Modal";
 
-export default function DataStockAdminPages() {
-  const [stocks, setStocks] = useState<Stock[]>([]);
+export default function DataLaporanAdminPages() {
+  const [report, setReport] = useState<Laporan[]>([]);
 
-  const [pagination, setPaginations] = useState({
+  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [pagination, setPagination] = useState({
     current_page: 1,
     last_page: 1,
   });
 
-  const [message, setMessage] = useState("");
-
-  const [showModal, setShowModal] = useState(false);
-
   const navigate = useNavigate();
 
-  const GetAllStock = useCallback(async (page: number = 1) => {
+  const fetchReport = async (page: number = 1) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/admin/stock/getAllStocks",
+        "http://127.0.0.1:8000/api/admin/laporan/getAllLaporan",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,25 +47,25 @@ export default function DataStockAdminPages() {
         },
       );
 
-      setStocks(response.data.data.data);
-      setPaginations({
+      setReport(response.data.data.data);
+      setPagination({
         current_page: response.data.data.current_page,
         last_page: response.data.data.last_page,
       });
     } catch (error) {
       console.error("Error : ", error);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    GetAllStock();
-  }, [GetAllStock]);
+    fetchReport();
+  }, []);
 
-  const deleteStock = async (id: number) => {
+  const deleteReport = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/admin/stock/deleteStock/${id}`,
+        `http://127.0.0.1:8000/api/admin/laporan/deleteLaporan/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,15 +77,13 @@ export default function DataStockAdminPages() {
       setShowModal(true);
 
       // refresh the data
-      GetAllStock();
+      fetchReport();
 
       setTimeout(() => {
         setShowModal(false);
-        navigate("/admin/data_stock");
+        navigate("/admin/data_laporan");
       }, 2000);
     } catch (error) {
-      setMessage("Error, gagal menghapus data!");
-      setShowModal(true);
       console.error("Error : ", error);
     }
   };
@@ -93,17 +94,15 @@ export default function DataStockAdminPages() {
       <div className="flex flex-1 flex-col">
         <NavBarAdmin />
         <div className="flex-1 p-6 overflow-y-auto mt-7">
-          <h1 className="font-medium text-3xl">Data Stock Produk</h1>
-          <div className="mt-3">
-            <h2>
-              <Link
-                to={"/admin/tambah_data_stock"}
-                className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
-              >
-                Tambah Data Stok Produk
-              </Link>
-            </h2>
-          </div>
+          <h1 className="font-medium text-3xl">Halaman Data Laporan</h1>
+          <h2 className="mt-3">
+            <Link
+              to={"/admin/tambah_laporan"}
+              className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
+            >
+              Tambah Data Laporan
+            </Link>
+          </h2>
           <div className="overflow-x-auto">
             <Modal show={showModal} onClose={() => setShowModal(false)}>
               <p className="text-center text-gray-700">{message}</p>
@@ -113,61 +112,49 @@ export default function DataStockAdminPages() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        ID Stock
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
+                        ID Laporan
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        ID Produk
-                      </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
                         Nama Produk
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Jumlah Stok Produk
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
+                        Total Penjualan
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Lokasi
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
+                        Tanggal Laporan
                       </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
-                        Tanggal Expired
-                      </TableHead>
-                      <TableHead className="font-semibold text-[16px] px-4 py-2">
+                      <TableHead className="font-semibold px-4 py-2 text-[16px]">
                         Aksi
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {stocks.map((data) => (
+                    {report.map((data) => (
                       <TableRow key={data.id}>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
                           {data.id}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.product_id}
-                        </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
                           {data.product?.name}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.quantity}
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.penjualan?.total_penjualan}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.location}
+                        <TableCell className="font-medium border border-gray-300 px-4 py-2">
+                          {data.tgl_laporan.toString()}
                         </TableCell>
-                        <TableCell className="font-medium border border-gray-300 text-[16px] px-4 py-2">
-                          {data.expiration_date.toString()}
-                        </TableCell>
-                        <TableCell className="border border-gray-300 px-4 py-2 space-x-2">
+                        <TableCell className="space-x-2 border border-gray-300 px-4 py-2">
                           <Link
-                            to={`/admin/edit_data_stock/${data.id}`}
-                            className="inline-block rounded-lg shadow-lg text-white px-4 py-2 bg-blue-500 hover:bg-blue-700"
+                            to={`/admin/edit_laporan/${data.id}`}
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
                           >
                             Edit
                           </Link>
 
                           <button
-                            className="inline-block rounded-lg shadow-lg text-white px-4 py-2 bg-red-500 hover:bg-red-700"
-                            onClick={() => deleteStock(data.id)}
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700"
+                            onClick={() => deleteReport(data.id)}
                           >
                             Delete
                           </button>
@@ -182,7 +169,7 @@ export default function DataStockAdminPages() {
                   <button
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={pagination.current_page === 1}
-                    onClick={() => GetAllStock(pagination.current_page - 1)}
+                    onClick={() => fetchReport(pagination.current_page - 1)}
                   >
                     Previous
                   </button>
@@ -193,7 +180,7 @@ export default function DataStockAdminPages() {
                   <button
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={pagination.current_page === pagination.last_page}
-                    onClick={() => GetAllStock(pagination.current_page + 1)}
+                    onClick={() => fetchReport(pagination.current_page + 1)}
                   >
                     Next
                   </button>

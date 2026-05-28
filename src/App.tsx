@@ -16,6 +16,16 @@ import FormEditDataStockAdminPages from "./pages/Admin/DataStock/EditDataStock";
 import FormEditCategories from "./pages/Admin/DataCategories/EditCategories";
 import DetailProduct from "./pages/Admin/DataProduct/DetailProduct";
 import DetailSupplier from "./pages/Admin/DataSuppliers/DetailSupplier";
+import DataPenjualanAdminPages from "./pages/Admin/DataPenjualan/IndexDataPenjualan";
+import FormTambahDataPenjualan from "./pages/Admin/DataPenjualan/TambahPenjualan";
+import FormEditDataPenjualan from "./pages/Admin/DataPenjualan/EditPenjualan";
+import DataLaporanAdminPages from "./pages/Admin/DataLaporan/IndexDataLaporan";
+import FormTambahLaporan from "./pages/Admin/DataLaporan/TambahLaporan";
+import FormEditLaporan from "./pages/Admin/DataLaporan/EditLaporan";
+import DetailUserPages from "./pages/Admin/DataUsers/DetailUser";
+import DataTransaksiAdminPages from "./pages/Admin/DataTransaksi/IndexDataTransaksi";
+import FormTambahDataTransaksi from "./pages/Admin/DataTransaksi/TambahDataTransaksi";
+import FormEditDataTransaksi from "./pages/Admin/DataTransaksi/EditDataTransaksi";
 
 function App() {
   return (
@@ -30,6 +40,10 @@ function App() {
         <Route
           path="/admin/data_users"
           element={<IndexDataUsersPages />}
+        ></Route>
+        <Route
+          path="/admin/detail_user/:id"
+          element={<DetailUserPages />}
         ></Route>
         <Route
           path="/admin/data_products"
@@ -86,6 +100,42 @@ function App() {
         <Route
           path="/admin/detail_supplier/:id"
           element={<DetailSupplier />}
+        ></Route>
+        <Route
+          path="/admin/data_penjualan"
+          element={<DataPenjualanAdminPages />}
+        ></Route>
+        <Route
+          path="/admin/tambah_data_penjualan"
+          element={<FormTambahDataPenjualan />}
+        ></Route>
+        <Route
+          path="/admin/edit_data_penjualan/:id"
+          element={<FormEditDataPenjualan />}
+        ></Route>
+        <Route
+          path="/admin/data_laporan"
+          element={<DataLaporanAdminPages />}
+        ></Route>
+        <Route
+          path="/admin/tambah_laporan"
+          element={<FormTambahLaporan />}
+        ></Route>
+        <Route
+          path="/admin/edit_laporan/:id"
+          element={<FormEditLaporan />}
+        ></Route>
+        <Route
+          path="/admin/data_transaksi"
+          element={<DataTransaksiAdminPages />}
+        ></Route>
+        <Route
+          path="/admin/tambah_data_transaksi"
+          element={<FormTambahDataTransaksi />}
+        ></Route>
+        <Route
+          path="/admin/edit_data_transaksi/:id"
+          element={<FormEditDataTransaksi />}
         ></Route>
       </Routes>
     </BrowserRouter>

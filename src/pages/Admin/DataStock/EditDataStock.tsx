@@ -96,6 +96,8 @@ export default function FormEditDataStockAdminPages() {
         navigate("/admin/data_stock");
       }, 2000);
     } catch (error) {
+      setMessage("Error, terjadi kesalahan pada sistem!");
+      setShowModal(true);
       console.error("Error : ", error);
     }
   };

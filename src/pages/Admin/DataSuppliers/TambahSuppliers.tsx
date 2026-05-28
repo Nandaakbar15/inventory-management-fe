@@ -1,17 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import NavBarAdmin from "@/components/NavbarAdmin";
 import SideBarAdmin from "@/components/SidebarAdmin";
-import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Modal from "@/components/Modal";
 
@@ -58,6 +50,8 @@ export default function FormTambahSupplier() {
         navigate("/admin/data_suppliers");
       }, 2000);
     } catch (error) {
+      setMessage("Errror, terjadi kesalahan pada sistem!");
+      setShowModal(true);
       console.error("Error : ", error);
     }
   };

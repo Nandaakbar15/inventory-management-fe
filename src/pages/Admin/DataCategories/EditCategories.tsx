@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import axios from "axios";
@@ -67,6 +66,8 @@ export default function FormEditCategories() {
         setShowModal(false);
       }, 2000);
     } catch (error) {
+      setMessage("Error, terjadi kesalahan pada sistem!");
+      setShowModal(true);
       console.error("Error : ", error);
     }
   };
