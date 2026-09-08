@@ -1,73 +1,89 @@
-# React + TypeScript + Vite
+# Inventory Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplikasi mengelola stok barang gudang berbasis website
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- CRUD Data Produk
+- CRUD Data Penjualan
+- CRUD Data Stok Barang
+- CRUD Data Supplier
+- CRUD Data Transaksi
 
-## React Compiler
+## Screenshot App
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Login Pages
+  ![Login Page](./public/images/screenshots/Login%20Pages.png)
 
-## Expanding the ESLint configuration
+<br>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Dashboard
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+![Dashboard](./public/images/screenshots/Invetory%20Management%20App%20dashboard.png)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+<br>
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- User Data
+  ![User Data](./public/images/screenshots/Data%20User.png)
+
+<br>
+
+- Product Data
+  ![Product Data](./public/images/screenshots/Data%20Produk.png)
+
+<br>
+
+- Supplier Data
+  ![Suppliers Data](./public/images/screenshots/Data%20Supplier.png)
+
+<br>
+
+- Stock Data
+  ![Stock Data](./public/images/screenshots/Data%20Stok%20Produk.png)
+
+<br>
+
+- Categories Data
+  ![Categories Data](./public/images/screenshots/Data%20Kategori.png)
+
+<br>
+
+- Sales Data
+  ![Sales Data](./public/images/screenshots/Data%20Penjualan.png)
+
+<br>
+
+- Report Data
+  ![Report Data](./public/images/screenshots/Data%20Laporan.png)
+
+<br>
+
+- Transaction Data
+
+![Transaction Data](./public/images/screenshots/Data%20Transaksi.png)
+
+## Installation
+
+1. Clone Repository
+
+```
+git clone https://github.com/Nandaakbar15/inventory-frontend.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Masuk ke folder project:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```
+cd inventory-frontend
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Install dependencies:
+
+```
+npm install
+```
+
+Jalankan aplikasi:
+
+```
+npm run dev
 ```
